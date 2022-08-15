@@ -9,7 +9,6 @@ Output: The indexes of the points, sorted in a way that approximates the TSP pro
 
 Algorithm:
 Christofides Algorithm was implemented with some several tweaks.
-Algorithm:
 1. Solve the minimum spanning tree with Prim's algorithm
 2. Connect the tree into an Eulerian path, using depth first search
 3. Create a hamiltonian path by deleting repeated verticies
