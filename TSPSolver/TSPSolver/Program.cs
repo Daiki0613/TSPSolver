@@ -11,7 +11,7 @@ namespace TSPSolver
         //public static List<List<double>> Main()
         public static void Main()
         {
-            List<List<double>> CoordList = Samples.Sample2();
+            List<List<double>> CoordList = Samples.Sample4();
 
             int len = CoordList.Count;
             double[,] G = make_graph(CoordList);
@@ -21,7 +21,8 @@ namespace TSPSolver
 
             List<List<double>> res = new List<List<double>>();
             for (int i = 0; i<len; i++) res.Add(new List<double> { CoordList[path[i]][0], CoordList[path[i]][1] });
-            for (int i = 0; i<len; i++) Console.WriteLine(order[i]);
+            for (int i = 0; i<len; i++) Console.WriteLine(path[i]);
+                
 
 
             Console.WriteLine(total_dist(len, G));
@@ -154,14 +155,14 @@ namespace TSPSolver
         private static int[] optimize(int[] order, double[,] G)
         {
             
-            int n = order.Length;
+            /*int n = order.Length;
             { //開回路の最短距離になるよう、開始点と終了点を追加する
                 int[] new_order = new int[n + 2];
                 new_order[0] = n;
                 for (int x = 0; x < n; x++) new_order[x + 1] = order[x];
                 new_order[n + 1] = n + 1;
                 order = new_order;
-            }
+            }*/
 
             int count = 0;
             while (true)
@@ -178,11 +179,11 @@ namespace TSPSolver
                 }
             }
 
-            { //開始点と終了点削除
+            /*{ //開始点と終了点削除
                 int[] new_order = new int[n];
                 for (int x = 0; x < n; x++) new_order[x] = order[x + 1];
                 order = new_order;
-            }
+            }*/
             return order;
         }
 
@@ -212,14 +213,14 @@ namespace TSPSolver
         {
             int n = order.Length;
             double loss = 0;
-            for (int i = 0; i < n-1; i++)
+            for (int i = 0; i < n; i++)
             {
-                for (int j = i + 1; j < n-1; j++)
+                for (int j = i + 1; j < n; j++)
                 {
-                    for (int k = j + 1; k < n-1; k++)
+                    for (int k = j + 1; k < n; k++)
                     {
                         int A = order[i], B = order[i + 1], C = order[j];
-                        int D = order[j + 1], E = order[k], F = order[k + 1];
+                        int D = order[j + 1], E = order[k], F = order[(k + 1)%n];
                         double d0 = G[A, B] + G[C, D] + G[E, F];
                         double d1 = G[A, B] + G[C, E] + G[D, F];
                         double d2 = G[A, C] + G[B, D] + G[E, F];
