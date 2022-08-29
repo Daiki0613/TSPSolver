@@ -6,39 +6,46 @@ using System.Threading.Tasks;
 
 namespace TSPSolver
 {
-    public class Christofides
+    public class TSPSolver
     {
         //public static List<List<double>> Main()
         public static void Main()
         {
-            List<List<double>> CoordList = Samples.Sample4();
-
-            int len = CoordList.Count;
-            double[,] G = make_graph(CoordList);
-            bool[,] MST = prim(len, G);
-            int[] order = loop(len, MST, G);
-            int[] path = optimize(order, G);
-
-            List<List<double>> res = new List<List<double>>();
-            for (int i = 0; i<len; i++) res.Add(new List<double> { CoordList[path[i]][0], CoordList[path[i]][1] });
-            for (int i = 0; i<len; i++) Console.WriteLine(path[i]);
-                
-
-
-            Console.WriteLine(total_dist(len, G));
-            Console.WriteLine(total_dist(order, G));
-            Console.WriteLine(total_dist(path, G));
+            List<List<double>> inputlist = Samples.Sample7();
+            var ans = Christofides(inputlist);
+            for (int i = 0; i<ans.Count; i++)  Console.WriteLine(String.Format("{0} {1}", ans[i][0], ans[i][1]));
             return;
             //return res;
         }
+
+        public static List<List<double>> Christofides(List<List<double>> inputlist)
+        {
+            List<coord> CoordList = new List<coord>();
+            for (int i = 0; i < inputlist.Count; i++) CoordList.Add(new coord(i, inputlist[i][0], inputlist[i][1]));
+
+            int len = CoordList.Count;
+            double[,] G = make_graph(CoordList); //二点間の距離を持つグラフ生成
+            bool[,] MST = prim(len, G); //最小全域木の作成
+            int[] order = loop(len, MST, G); //全域木を用いて一時的に回路を作成
+            int[] path = optimize(order, G); //回路の最適化
+
+            CoordList = CoordList.OrderBy(d => path.ToList().IndexOf(d.id)).ToList(); //座標ソート処理
+            //Console.WriteLine(total_dist(len, G)); //整理前の総距離
+            //Console.WriteLine(total_dist(path, G)); //整理後の総距離
+
+            List<List<double>> res = new List<List<double>>();
+            for (int i = 0; i < CoordList.Count; i++) res.Add(new List<double>() { CoordList[i].x, CoordList[i].y });
+            return res;
+        }
+
         #region グラフ生成
-        private static double[,] make_graph(List<List<double>> CoordList)
+        private static double[,] make_graph(List<coord> CoordList)
         {
             int len = CoordList.Count();
             double[,] G = new double[len + 2, len + 2];
             for (int i = 0; i < len; i++) for (int j = i + 1; j < len; j++) //グラフ作成
             {
-                double dist = calc_dist(CoordList[i][0], CoordList[i][1], CoordList[j][0], CoordList[j][1]);
+                double dist = calc_dist(CoordList[i].x, CoordList[i].y, CoordList[j].x, CoordList[j].y);
                 G[i, j] = dist;
                 G[j, i] = dist;
             }
@@ -50,7 +57,7 @@ namespace TSPSolver
         private static double calc_dist(double x1, double y1, double x2, double y2)
         {
             //return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
-            return Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+            return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
         }
         private static double total_dist(int[] order, double[,] G)
         {
@@ -155,35 +162,35 @@ namespace TSPSolver
         private static int[] optimize(int[] order, double[,] G)
         {
             
-            /*int n = order.Length;
+            int n = order.Length;
             { //開回路の最短距離になるよう、開始点と終了点を追加する
                 int[] new_order = new int[n + 2];
                 new_order[0] = n;
                 for (int x = 0; x < n; x++) new_order[x + 1] = order[x];
                 new_order[n + 1] = n + 1;
                 order = new_order;
-            }*/
+            }
 
             int count = 0;
             while (true)
             {
                 count++;
                 double loss = three_opt(G, ref order);
-                if (loss == 0)
+                if (loss <= 1E-8)
                 {
-                    //break;
+                    break;
                 }
-                    if (count > 1000)
+                if (count > 10000)
                 {
                     break;
                 }
             }
 
-            /*{ //開始点と終了点削除
+            { //開始点と終了点削除
                 int[] new_order = new int[n];
                 for (int x = 0; x < n; x++) new_order[x] = order[x + 1];
                 order = new_order;
-            }*/
+            }
             return order;
         }
 
@@ -192,9 +199,9 @@ namespace TSPSolver
             int n = order.Length; 
             int[] new_order = new int[n];
             int index = 0;
-            for (int x = 0; x < i + 1; x++) new_order[index++] = order[x % n];
-            for (int x = j; x >= i + 1; x--) new_order[index++] = order[x % n];
-            for (int x = j + 1; x < n; x++) new_order[index++] = order[x % n];
+            for (int x = 0; x < i + 1; x++) new_order[index++] = order[x];
+            for (int x = j; x >= i + 1; x--) new_order[index++] = order[x];
+            for (int x = j + 1; x < n; x++) new_order[index++] = order[x];
             order = new_order;
         }
         private static void cycle(int i, int j, int k, ref int[] order) //i→i+1→j→j+1→k→k+1 を i→j+1→k→i+1→j→k+1
@@ -202,10 +209,10 @@ namespace TSPSolver
             int n = order.Length; 
             int[] new_order = new int[n];
             int index = 0;
-            for (int x = 0; x < i + 1; x++) new_order[index++] = order[x % n];
-            for (int x = j + 1; x < k + 1; x++) new_order[index++] = order[x % n];
-            for (int x = i + 1; x < j + 1; x++) new_order[index++] = order[x % n];
-            for (int x = k + 1; x < n; x++) new_order[index++] = order[x % n];
+            for (int x = 0; x < i + 1; x++) new_order[index++] = order[x];
+            for (int x = j + 1; x < k + 1; x++) new_order[index++] = order[x];
+            for (int x = i + 1; x < j + 1; x++) new_order[index++] = order[x];
+            for (int x = k + 1; x < n; x++) new_order[index++] = order[x];
             order = new_order;
         }
 
@@ -213,11 +220,11 @@ namespace TSPSolver
         {
             int n = order.Length;
             double loss = 0;
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n-1; i++)
             {
-                for (int j = i + 1; j < n; j++)
+                for (int j = i + 1; j < n-1; j++)
                 {
-                    for (int k = j + 1; k < n; k++)
+                    for (int k = j + 1; k < n-1; k++)
                     {
                         int A = order[i], B = order[i + 1], C = order[j];
                         int D = order[j + 1], E = order[k], F = order[(k + 1)%n];
@@ -243,5 +250,21 @@ namespace TSPSolver
             return loss;
         }
         #endregion
+
+        #region 座標クラス
+        private class coord
+        {
+            public int id;
+            public double x;
+            public double y;
+            public coord(int id, double x, double y)
+            {
+                this.id = id;
+                this.x = x;
+                this.y = y;
+            }
+        }
+        #endregion
+
     }
 }
