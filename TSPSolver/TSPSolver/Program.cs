@@ -11,7 +11,7 @@ namespace TSPSolver
         //public static List<List<double>> Main()
         public static void Main()
         {
-            List<List<double>> CoordList = Samples.Sample6();
+            List<List<double>> CoordList = Samples.Sample2();
 
             int len = CoordList.Count;
             double[,] G = make_graph(CoordList);
@@ -21,6 +21,8 @@ namespace TSPSolver
 
             List<List<double>> res = new List<List<double>>();
             for (int i = 0; i<len; i++) res.Add(new List<double> { CoordList[path[i]][0], CoordList[path[i]][1] });
+            for (int i = 0; i<len; i++) Console.WriteLine(order[i]);
+
 
             Console.WriteLine(total_dist(len, G));
             Console.WriteLine(total_dist(order, G));
@@ -166,8 +168,14 @@ namespace TSPSolver
             {
                 count++;
                 double loss = three_opt(G, ref order);
-                if (loss == 0) break;
-                if (count > 1000) break;
+                if (loss == 0)
+                {
+                    //break;
+                }
+                    if (count > 1000)
+                {
+                    break;
+                }
             }
 
             { //開始点と終了点削除
@@ -221,13 +229,13 @@ namespace TSPSolver
                         double d6 = G[A, E] + G[D, B] + G[C, F];
                         double d7 = G[A, E] + G[D, C] + G[B, F];
 
-                        if (d0 > d1) { reverse(j, k, ref order); loss = d0 - d1; }
-                        else if (d0 > d2) { reverse(i, j, ref order); loss = d0 - d2; }
-                        else if (d0 > d3) { reverse(i, k, ref order); cycle(i, j, k, ref order); loss = d0 - d3; }
-                        else if (d0 > d4) { cycle(i, j, k, ref order); loss = d0 - d4; }
-                        else if (d0 > d5) { reverse(i, j, ref order); cycle(i, j, k, ref order); loss = d0 - d5; }
-                        else if (d0 > d6) { reverse(j, k, ref order); cycle(i, j, k, ref order); loss = d0 - d6; }
-                        else if (d0 > d7) { reverse(i, k, ref order); loss = d0 - d7; }
+                        if (d0 > d1) { reverse(j, k, ref order); loss += d0 - d1; }
+                        else if (d0 > d2) { reverse(i, j, ref order); loss += d0 - d2; }
+                        else if (d0 > d3) { reverse(i, k, ref order); cycle(i, j, k, ref order); loss += d0 - d3; }
+                        else if (d0 > d4) { cycle(i, j, k, ref order); loss += d0 - d4; }
+                        else if (d0 > d5) { reverse(i, j, ref order); cycle(i, j, k, ref order); loss += d0 - d5; }
+                        else if (d0 > d6) { reverse(j, k, ref order); cycle(i, j, k, ref order); loss += d0 - d6; }
+                        else if (d0 > d7) { reverse(i, k, ref order); loss += d0 - d7; }
                     }
                 }
             }
