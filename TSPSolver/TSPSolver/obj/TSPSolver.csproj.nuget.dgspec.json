@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\daiki\\source\\repos\\TSPSolver\\TSPSolver\\TSPSolver.csproj": {}
+    "C:\\Users\\OK-M4\\Desktop\\github2\\TSPSolver\\TSPSolver\\TSPSolver\\TSPSolver.csproj": {}
   },
   "projects": {
-    "C:\\Users\\daiki\\source\\repos\\TSPSolver\\TSPSolver\\TSPSolver.csproj": {
+    "C:\\Users\\OK-M4\\Desktop\\github2\\TSPSolver\\TSPSolver\\TSPSolver\\TSPSolver.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\daiki\\source\\repos\\TSPSolver\\TSPSolver\\TSPSolver.csproj",
+        "projectUniqueName": "C:\\Users\\OK-M4\\Desktop\\github2\\TSPSolver\\TSPSolver\\TSPSolver\\TSPSolver.csproj",
         "projectName": "TSPSolver",
-        "projectPath": "C:\\Users\\daiki\\source\\repos\\TSPSolver\\TSPSolver\\TSPSolver.csproj",
-        "packagesPath": "C:\\Users\\daiki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\daiki\\source\\repos\\TSPSolver\\TSPSolver\\obj\\",
+        "projectPath": "C:\\Users\\OK-M4\\Desktop\\github2\\TSPSolver\\TSPSolver\\TSPSolver\\TSPSolver.csproj",
+        "packagesPath": "C:\\Users\\OK-M4\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\OK-M4\\Desktop\\github2\\TSPSolver\\TSPSolver\\TSPSolver\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\daiki\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\OK-M4\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.org/api/v2": {}
         },
         "frameworks": {
           "net6.0": {
@@ -54,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }
